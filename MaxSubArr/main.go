@@ -9,12 +9,14 @@ func main() {
 	nums4 := []int{-2, 1}
 	nums5 := []int{-2, -1, -3}
 	nums6 := []int{-1, -2}
+	nums7 := []int{1, 2}
 	fmt.Println(MaxSubArr(nums1))
 	fmt.Println(MaxSubArr(nums2))
 	fmt.Println(MaxSubArr(nums3))
 	fmt.Println(MaxSubArr(nums4))
 	fmt.Println(MaxSubArr(nums5))
 	fmt.Println(MaxSubArr(nums6))
+	fmt.Println(MaxSubArr(nums7))
 }
 
 // Works for all but extremelly large cases
@@ -36,6 +38,10 @@ func MaxSubArr(nums []int) int {
 			maxSum = nums[i]
 		}
 		for j := i + 1; j < len(nums); j++ {
+			if nums[j] > currSum+nums[j] {
+				i = j - 1
+				break
+			}
 			currSum = currSum + nums[j]
 
 			if currSum > maxSum {
