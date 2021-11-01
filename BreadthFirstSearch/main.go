@@ -26,8 +26,10 @@ func main() {
 	gn3.AddNeighbour(gn0)
 	gn4.AddNeighbour(gn3)
 
-	foundNode := gn0.BreadthFirstSearch(4)
-	fmt.Println(foundNode)
+	//foundNode := gn0.BreadthFirstSearch(4)
+	//fmt.Println(foundNode)
+	path := gn0.ShortestPath(4)
+	fmt.Println(path)
 
 	fmt.Println("Endee")
 }

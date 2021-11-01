@@ -50,3 +50,65 @@ func (ge *graphEdge) BreadthFirstSearch(searchedNode int) *graphEdge {
 
 	return nil
 }
+
+func (ge *graphEdge) ShortestPath(searchedValue int) []int {
+	previous := solveShortestPath(ge, searchedValue)
+	path := reconstructShortestPath(previous, searchedValue, ge.value)
+	return path
+}
+
+func solveShortestPath(ge *graphEdge, searchedValue int) map[int]int {
+	if ge.value == searchedValue {
+		return nil
+	}
+
+	queue := Queue.NewQueue()
+	queue.Enqueue(ge)
+
+	previous := map[int]int{}
+	visited := map[int]bool{}
+
+	previous[ge.value] = 0x7FFFFFFFFFFFFFFF //max int
+	for queue.Count > 0 {
+		edge := queue.Dequeue().(*graphEdge)
+		visited[edge.value] = true
+		if edge.value == searchedValue {
+			return previous
+		}
+		for _, neighbour := range edge.neighbours {
+			_, found := visited[neighbour.value]
+			if !found && !queue.Contains(neighbour.value) {
+				if _, found := previous[neighbour.value]; !found {
+					previous[neighbour.value] = edge.value
+				}
+				queue.Enqueue(neighbour)
+			}
+		}
+	}
+
+	return previous
+}
+
+func reconstructShortestPath(previous map[int]int, searchedValue int, startNode int) []int {
+	path := []int{}
+	at := searchedValue
+
+	for {
+		_, found := previous[at]
+		if !found {
+			break
+		}
+		path = append(path, at)
+		at = previous[at]
+	}
+
+	for i, j := 0, len(path)-1; i < j; i, j = i+1, j-1 {
+		path[i], path[j] = path[j], path[i]
+	}
+
+	if path[0] == startNode {
+		return path
+	}
+
+	return path
+}
